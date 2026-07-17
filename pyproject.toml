@@ -124,6 +124,12 @@ dev = [
     "edx-i18n-tools",
 ]
 
+[tool.semantic_release]
+# version is dynamic via setuptools-scm; no version_toml needed
+build_command = "python -m pip install --upgrade build && SETUPTOOLS_SCM_PRETEND_VERSION=$NEW_VERSION python -m build"
+allow_zero_version = true
+major_on_zero = false
+
 [tool.edx_lint]
 uv_constraints = []
 
