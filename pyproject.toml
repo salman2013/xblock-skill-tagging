@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=64", "setuptools-scm>=8.0"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "skill_tagging"
@@ -18,7 +18,6 @@ classifiers = [
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.2",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
@@ -77,3 +76,65 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "htmlcov"
+
+[dependency-groups]
+# Base test dependencies (no Django — pinned per group below)
+test-base = [
+    "pytest-cov",
+    "pytest-django",
+    "code-annotations",
+    "xblock-sdk",
+    "djangorestframework",
+    "mock",
+]
+# Default test group uses current supported Django (5.2)
+test = [
+    {include-group = "test-base"},
+    "Django>=5.2,<6.0",
+]
+# Legacy Django 4.2 support
+django42 = [
+    {include-group = "test-base"},
+    "Django>=4.2,<5.0",
+]
+quality = [
+    {include-group = "test"},
+    "edx-lint",
+    "isort",
+    "pycodestyle",
+    "pydocstyle",
+]
+doc = [
+    {include-group = "test"},
+    "doc8",
+    "twine",
+    "build",
+    "Sphinx",
+]
+# Minimal CI group — install first, then call uv run tox
+ci = [
+    "tox",
+    "tox-uv",
+]
+dev = [
+    {include-group = "quality"},
+    {include-group = "ci"},
+    {include-group = "doc"},
+    "diff-cover",
+    "edx-i18n-tools",
+]
+
+[tool.edx_lint]
+uv_constraints = []
+
+# NOTE: [tool.uv].constraint-dependencies is machine-managed.
+# Run: uv run --with edx-lint edx_lint write_uv_constraints pyproject.toml
+[tool.uv]
+package = true
+conflicts = [
+    [
+        {group = "test"},
+        {group = "django42"},
+    ],
+]
+constraint-dependencies = []
