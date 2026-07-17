@@ -44,6 +44,7 @@ version_scheme = "only-version"
 local_scheme = "no-local-version"
 
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["skill_tagging*"]
 
 [tool.setuptools.exclude-package-data]
