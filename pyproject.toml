@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8.0"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "skill_tagging"
+description = "Django app plugin for fetching and verifying tags for xblock skills."
+readme = "README.rst"
+license = "AGPL-3.0"
+license-files = ["LICENSE.txt"]
+authors = [
+    {name = "edX", email = "oscm@edx.org"},
+]
+keywords = ["Python", "edx"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.12"
+dynamic = ["version"]
+dependencies = [
+    "Django>=4.2",
+    "django-model-utils",
+    "openedx-events",
+    "openedx-filters",
+    "openedx-django-pyfs",
+    "lazy",
+]
+
+[project.urls]
+Homepage = "https://github.com/openedx/xblock-skill-tagging"
+
+[project.entry-points."lms.djangoapp"]
+skill_tagging = "skill_tagging.apps:SkillTaggingConfig"
+
+[tool.setuptools_scm]
+version_scheme = "only-version"
+local_scheme = "no-local-version"
+
+[tool.setuptools.packages.find]
+include = ["skill_tagging*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["tests*", "*.tests*", "spec*", "*.spec*"]
+
+[tool.coverage.run]
+branch = true
+source = ["skill_tagging"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+    "*/settings.py",
+    "*/test_settings.py",
+    "*admin.py",
+    "*/static/*",
+    "*/templates/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
